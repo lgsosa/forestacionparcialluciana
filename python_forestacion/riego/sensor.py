@@ -1,0 +1,26 @@
+﻿from ..patrones.observer.observer import Subject
+
+class SensorTemperatura(Subject):
+    def __init__(self):
+        super().__init__()
+    def nueva_medicion(self, temp_c: float):
+        self.notificar(("temp", temp_c))
+
+class SensorHumedad(Subject):
+    def __init__(self):
+        super().__init__()
+    def nueva_medicion(self, humedad_pct: float):
+        self.notificar(("hum", humedad_pct))
+
+class RiegoObserver:
+    """Adaptador simple para pasar mediciones al RiegoService."""
+    def __init__(self, riego_service):
+        self.riego_service = riego_service
+    def update(self, dato):
+        tipo, valor = dato
+        if tipo == "temp":
+            self.riego_service.set_temp(valor)
+        elif tipo == "hum":
+            self.riego_service.set_hum(valor)
+
+# Los sensores avisan al riego cuando cambia la temperatura o la humedad.
